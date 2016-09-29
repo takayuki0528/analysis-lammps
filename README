@@ -1,0 +1,37 @@
+Input Files
+  lammps dump files
+  "Order"
+    $ you should not change characters in the line (you can edit number)
+    # comment out
+
+構造体について
+Type Atom (ID<=NumAtoms)
+position
+wrapped position
+velocity
+type
+
+Type Molecule (ID<=NumMolecules)
+position
+wrapped position
+velocity
+type
+minID
+maxID
+
+基本の機能
+　Orderを読む
+　DumpファイルからAtomデータを読む
+　AtomデータからMoleculeデータを計算する
+　Atomの位置データをwrapping
+　Moleculeの位置データをwrapping
+  各ステップにおけるAtomとMolecule，および計算セルのデータを構造体から参照できます．
+  例） a(ID)%pos(DIM_X), m(ID)%vel(DIM_Z), c%length(DIM_Y)
+
+解析機能は追加できます
+　mod_****.f90をつくります．ここには，解析用の変数宣言および設定読み込み，配列割付，計算，出力サブルーチンを入れます．
+　（mod_InertiaMoment.f90が見本）
+　Analysis.f90を変更します．mod_****.f90からサブルーチンを呼び出す部分を追加します．
+ 基本的なサブルーチンがある場合，解析モジュールからも使えるようにMathematics.f90にまとめておきます．
+
+ InertiaMoment: 分子の慣性モーメント関連の配向秩序パラメータと回転半径を計算する

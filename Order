@@ -1,0 +1,36 @@
+$ Molecule 3 rows
+# [1st column] type (type 0 won't be analyzed)
+# [2nd column] number
+# [3rd column] minimum atom ID
+# [4th column] maximum atom ID
+0   1   1     8400
+0   1   8401  16800
+1   36  16801 20688
+
+$ Atom 7 types
+# [1st column] type (1,2,...,N)
+# [2nd column] mass
+# you can copy from your lammps input file
+1   12.0110
+2   12.0110
+3    1.0080
+4   18.9980
+5   15.9990
+6   12.0110
+7   12.0110
+
+$ DumpFile
+# format of your dump files should be "ITEM: ATOMS id type xu yu zu vx vy vz"
+Number_of_Files     20
+Initial_Dump        0
+Dump_Interval       5000
+# put in quotation marks
+Prefix_of_FileName  "dumps/atom."
+Suffix_of_FileName  ".dump"
+# ".true." or ".false." for periodicity in X & Y & Z directions
+Periodicity         .true. .true. .false.
+
+$ Analysis
+# [1st integer] number of sampling dumps for averaging
+# [2nd double-precision] threshold value for calculating eigens
+InertiaMoment 5
