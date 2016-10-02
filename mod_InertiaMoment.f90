@@ -84,10 +84,10 @@ subroutine calcInertiaMoment(nDump)
 			do iDim = DIM_X, DIM_Z
 				do jDim = DIM_X, DIM_Z
 					im(iMol,nDump)%matrix(jDim,iDim) = im(iMol,nDump)%matrix(jDim,iDim) &
-						& - ATMass(a(iAtom)%typ)*tempVec(jDim)*tempVec(iDim)
+						& - ATProp(1,a(iAtom)%typ)*tempVec(jDim)*tempVec(iDim)
 				end do
 				im(iMol,nDump)%matrix(iDim,iDim) = im(iMol,nDump)%matrix(iDim,iDim) &
-					& + ATMass(a(iAtom)%typ)*dot_product(tempVec,tempVec)
+					& + ATProp(1,a(iAtom)%typ)*dot_product(tempVec,tempVec)
 			end do
 		end do
 

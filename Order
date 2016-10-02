@@ -7,10 +7,11 @@ $ Molecule 3 rows
 0   1   8401  16800
 1   36  16801 20688
 
-$ Atom 7 types
+$ Atom 7 types with 1 property
 # [1st column] type (1,2,...,N)
-# [2nd column] mass
-# you can copy from your lammps input file
+# [2nd column] mass (1st property)
+# [3rd column] you can add properties such as vdW radius
+# ...
 1   12.0110
 2   12.0110
 3    1.0080
@@ -19,18 +20,20 @@ $ Atom 7 types
 6   12.0110
 7   12.0110
 
+$ Bead
+# Coming Soon ... ?
+
 $ DumpFile
 # format of your dump files should be "ITEM: ATOMS id type xu yu zu vx vy vz"
-Number_of_Files     20
-Initial_Dump        0
+Number_of_Files     10
+Initial_Dump        5000
 Dump_Interval       5000
 # put in quotation marks
-Prefix_of_FileName  "dumps/atom."
+Prefix_of_FileName  "input_sample/atom."
 Suffix_of_FileName  ".dump"
 # ".true." or ".false." for periodicity in X & Y & Z directions
 Periodicity         .true. .true. .false.
 
 $ Analysis
-# [1st integer] number of sampling dumps for averaging
-# [2nd double-precision] threshold value for calculating eigens
+# [1st integer] number of dumps to sample for averaging
 InertiaMoment 5

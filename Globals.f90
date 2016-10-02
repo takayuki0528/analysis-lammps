@@ -10,7 +10,8 @@ module Globals
 	integer, parameter :: DIM_Y = 2
 	integer, parameter :: DIM_Z = 3
 
-	double precision, parameter :: PI		= 3.1415926535897932d0
+	double precision, parameter :: PI		= 3.14159265358979323846264338327950288d0
+	double precision, parameter :: R_gc = 8.3144621d0
 
 	character, parameter :: TAB = '	'
 
@@ -18,23 +19,25 @@ module Globals
 ! Parameters Read from Order
 !===============================================================================
 
+	!=== Order Fiel ===!
 	integer :: UnitOrder = 10
 	integer :: StatOrder = 0
 
-	!=== Molecule ===!
+	!=== Molecule & Atom ===!
 
-	integer :: NumMoleculeTypes
+	integer :: NumMoleculeTags
 	integer :: NumMolecules
-	integer :: NumAtoms
+
 	integer :: NumRowsOMM
 	integer, allocatable :: OrderMolMatrix(:,:)
 
-	!=== Atom ===!
-
 	integer :: NumAtomTypes
-	double precision, allocatable :: ATMass(:)
+	integer :: NumAtoms
 
-	!=== DumpFile ===!
+	integer :: NumColumnsATP
+	double precision, allocatable :: ATProp(:,:)																	! 1st Property must be Mass
+
+	!=== Dump File ===!
 
 	integer :: NumDumps
 	integer :: InitialDump
@@ -54,7 +57,9 @@ module Globals
 !=======================================================================
 
 	!=== MPI ===!
-	integer:: nproc,ierr,myrank
+	integer:: nproc, ierr, myrank
+
+	!=== Global Types ===!
 
 	type cell
 	  double precision :: minEdge(NUM_DIMS) = 0.0d0
@@ -67,7 +72,7 @@ module Globals
 	  double precision :: pos(NUM_DIMS), wpos(NUM_DIMS)
 		double precision :: vel(NUM_DIMS)
 		double precision :: mass
-	  integer :: typ, minAtomID, maxAtomID
+	  integer :: tag, minAtomID, maxAtomID
 	end type molecule
 	type(molecule), allocatable :: m(:)
 

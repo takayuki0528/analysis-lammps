@@ -29,6 +29,8 @@ subroutine ReadOrderFile
 				call readOrderMolecule
 			else if (orderType .eq. "Atom") then
 				call readOrderAtom
+			else if (orderType .eq. "Bead") then
+				call readOrderBead
 			else if (orderType .eq. "DumpFile") then
 				call readOrderDumpFile
 			else if (orderType .eq. "Analysis") then
@@ -91,13 +93,13 @@ end subroutine readOrderMolecule
 subroutine readOrderAtom
 
 	character(64) :: 	curb, dummy																									! curb means "igeta" in Japanese
-	integer :: 				rowCounter, dummy_i
+	integer :: 				rowCounter, dummy_i, i
 
 !-------------------------------------------------------------------------------
 
 	backspace(UnitOrder)
-	read(UnitOrder,*) dummy, dummy, NumAtomTypes
-	allocate(ATMass(NumAtomTypes))
+	read(UnitOrder,*) dummy, dummy, NumAtomTypes, dummy, dummy, NumColumnsATP
+	allocate(ATProp(NumColumnsATP,NumAtomTypes))
 
 	rowCounter = 0
 	do while (.true.)
@@ -109,15 +111,36 @@ subroutine readOrderAtom
 		else if (curb .ne. "#") then
 			rowCounter = rowCounter+1
 			backspace(UnitOrder)
-			read(UnitOrder,*) dummy_i, ATMass(rowCounter)
+			read(UnitOrder,*) dummy_i, (ATProp(i,rowCounter), i = 1, NumColumnsATP)
 		end if
 	end do
 
 	if (NumAtomTypes .ne. rowCounter) then
-		print *, "ERROR: Invalid number of ATMass's rows"
+		print *, "ERROR: Invalid number of ATProp's rows"
 	end if
 
 end subroutine readOrderAtom
+
+!===============================================================================
+
+subroutine readOrderBead
+
+	character(64) :: 	curb, dummy																									! curb means "igeta" in Japanese
+
+!-------------------------------------------------------------------------------
+
+	do while (.true.)
+		read(UnitOrder,*,iostat=StatOrder) curb
+		if (StatOrder < 0) exit
+		if (curb .eq. "$") then
+			backspace(UnitOrder)
+			exit
+		else if (curb .ne. "#") then
+
+		end if
+	end do
+
+end subroutine readOrderBead
 
 !===============================================================================
 
@@ -165,14 +188,14 @@ subroutine Prepare
 
 !-------------------------------------------------------------------------------
 
-	NumMoleculeTypes = 0
+	NumMoleculeTags = 0
 	do i = 1, NumRowsOMM
-		if (NumMoleculeTypes < OrderMolMatrix(1,i))  then
-			NumMoleculeTypes = OrderMolMatrix(1,i)
+		if (NumMoleculeTags < OrderMolMatrix(1,i))  then
+			NumMoleculeTags = OrderMolMatrix(1,i)
 		end if
 	end do
 	if (myrank == 0) then
-		print *, "Number of Molecule Types : ", NumMoleculeTypes
+		print *, "Number of Molecule Tags : ", NumMoleculeTags
 	end if
 
 	NumMolecules = 0
@@ -190,7 +213,7 @@ subroutine Prepare
 		m(i)%wpos(:) = 0.0d0
 		m(i)%vel(:) = 0.0d0
 		m(i)%mass = 0.0d0
-		m(i)%typ = 0
+		m(i)%tag = 0
 		m(i)%minAtomID = 0
 		m(i)%maxAtomID = 0
 	end do
@@ -218,7 +241,7 @@ subroutine Prepare
 			& = (OrderMolMatrix(4,i)-OrderMolMatrix(3,i)+1) / OrderMolMatrix(2,i)
 		do j = 1, OrderMolMatrix(2,i)
 			iMol = iMol+1
-			m(iMol)%typ = OrderMolMatrix(1,i)
+			m(iMol)%tag = OrderMolMatrix(1,i)
 			m(iMol)%minAtomID = OrderMolMatrix(3,i) + (j-1)*numAtomsPerMol
 			m(iMol)%maxAtomID = OrderMolMatrix(3,i) + j*numAtomsPerMol - 1
 			if (myrank == 0) then

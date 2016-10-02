@@ -219,7 +219,7 @@ subroutine calcStatistics(rawdata,nSub,statistics)
 	statistics(:,i+4) = dsqrt(dumpSysVar(:)/dble(dataShape(3)-1))
 	statistics(:,i+5) = dsqrt(dumpAccVar(:)/dble(dataShape(3)*(dataShape(2)-1)))
 
-	if (i /= numTimeRows+4) then
+	if (i /= numTimeRows+1) then
 		print *, "ERROR: Invalid i for statistics calculation"
 	end if
 

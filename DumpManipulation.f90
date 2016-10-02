@@ -86,9 +86,9 @@ subroutine CalcMolCoM
     tempSumPos(:) = 0.0d0
     tempSumVel(:) = 0.0d0
     do iAtom = m(iMol)%minAtomID, m(iMol)%maxAtomID
-      tempSumMass = tempSumMass + ATMass(a(iAtom)%typ)
-      tempSumPos(:) = tempSumPos(:) + ATMass(a(iAtom)%typ)*a(iAtom)%pos(:)
-      tempSumVel(:) = tempSumVel(:) + ATMass(a(iAtom)%typ)*a(iAtom)%vel(:)
+      tempSumMass = tempSumMass + ATProp(1,a(iAtom)%typ)
+      tempSumPos(:) = tempSumPos(:) + ATProp(1,a(iAtom)%typ)*a(iAtom)%pos(:)
+      tempSumVel(:) = tempSumVel(:) + ATProp(1,a(iAtom)%typ)*a(iAtom)%vel(:)
     end do
 		m(iMol)%mass = tempSumMass
     m(iMol)%pos(:) = tempSumPos(:)/tempSumMass
